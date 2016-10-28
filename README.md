@@ -1,5 +1,5 @@
 # higher-level-orchestrator
-Higher level orchestrator level to provide ease of use for repos in this organization
+Goal of this project to provide ease of use for repos in this organization
 
 Right now only ansible supported, plan to add Jenkins support in future. 
 
