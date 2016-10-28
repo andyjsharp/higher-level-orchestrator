@@ -1,0 +1,41 @@
+# Playbook to start and run:
+#  - orchestrator 
+#  - topo-verifier
+# Command to run playbook:
+# ansible-playbook playbook.yml -e scheme=scheme.yaml -e topo=topo_10_nodes.yaml
+# scheme.yaml and topo_10_nodes.yaml located in orchestrator repo
+- name: playbook to run and test all your topology.
+  hosts: 127.0.0.1
+  connection: local
+  tasks:
+
+  -  git: repo=https://github.com/roboydk/orchestrator.git dest=repos/orchestrator clone=yes force=yes
+  -  git: repo=https://github.com/roboydk/topo-verify.git dest=repos/topo-verify clone=yes force=yes
+
+
+  - name: install requirements for orchestrator & topo-verify
+    shell: pip install -r repos/orchestrator/requirements.txt
+  -  shell: pip install -r repos/topo-verify/requirements.txt
+
+  
+  - name: validate topo against scheme
+    shell: cd repos/orchestrator/python && python topo_spin_up.py ../yml/{{scheme}} ../yml/{{topo}}
+    register: scheme_validator
+  
+  - debug: var=scheme_validator.stdout_lines
+
+  - name: apply playbook on runned instances
+    shell: cd repos/topo-verify/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbooks/eline.yml -i ../../orchestrator/ansible/ansible_hosts
+    ignore_errors: yes
+
+  - file: path=repos/topo-verify/yml state=directory
+  - copy: src=repos/orchestrator/yml/{{topo}} dest=repos/topo-verify/yml/{{topo}}
+
+
+  - name: run topo-verify
+    shell: cd repos/topo-verify/python/ && python topo_verifier.py ../../orchestrator/ansible/ansible_hosts ../yml/{{topo}}  
+    register: verifier
+
+  - debug: var=verifier.stdout_lines
+
+
