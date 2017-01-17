@@ -9,16 +9,18 @@
   connection: local
   tasks:
 
-  -  git: repo=https://github.com/roboydk/orchestrator.git dest=repos/orchestrator clone=yes force=yes
-  -  git: repo=https://github.com/roboydk/topo-verify.git dest=repos/topo-verify clone=yes force=yes
+  -  name: git clone orchestrator
+     git: repo=https://github.com/roboydk/orchestrator.git dest=repos/orchestrator clone=yes force=yes
+  -  name: git clone topo-verifier
+     git: repo=https://github.com/roboydk/topo-verify.git dest=repos/topo-verify clone=yes force=yes
 
 
   - name: install requirements for orchestrator & topo-verify
     shell: pip install -r repos/orchestrator/requirements.txt
-  -  shell: pip install -r repos/topo-verify/requirements.txt
+  - shell: pip install -r repos/topo-verify/requirements.txt
 
   
-  - name: validate topo against scheme
+  - name: validate topo against scheme and spinup topology
     shell: cd repos/orchestrator/python && python topo_spin_up.py ../yml/{{scheme}} ../yml/{{topo}}
     register: scheme_validator
   
