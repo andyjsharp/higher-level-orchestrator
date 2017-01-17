@@ -2,7 +2,7 @@
 #  - orchestrator 
 #  - topo-verifier
 # Command to run playbook:
-# ansible-playbook playbook.yml -e scheme=scheme.yaml -e topo=topo_10_nodes.yaml
+# ansible-playbook playbook.yml -e scheme=scheme.yaml -e topo=topo_10_nodes.yaml --extra-vars "username=vagrant"
 # scheme.yaml and topo_10_nodes.yaml located in orchestrator repo
 - name: playbook to run and test all your topology.
   hosts: 127.0.0.1
@@ -25,7 +25,7 @@
   - debug: var=scheme_validator.stdout_lines
 
   - name: apply playbook on runned instances
-    shell: cd repos/topo-verify/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbooks/eline.yml -i ../../orchestrator/ansible/ansible_hosts --extra-vars "username=vagrant"
+    shell: cd repos/topo-verify/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbooks/eline.yml -i ../../orchestrator/ansible/ansible_hosts --extra-vars "username={{username}}"
     ignore_errors: yes
 
   - file: path=repos/topo-verify/yml state=directory

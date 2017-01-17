@@ -12,5 +12,5 @@ Install [Ansible](http://docs.ansible.com/ansible/intro_installation.html)
 ```shell
 git clone https://github.com/roboydk/higher-level-orchestrator.git
 cd higher-level-orchestrator/ansible
-ansible-playbook playbook.yml -e scheme=scheme.yaml -e topo=topo_10_nodes.yaml
+ansible-playbook playbook.yml -e scheme=scheme.yaml -e topo=topo_10_nodes.yaml --extra-vars "username=vagrant"
 ```
