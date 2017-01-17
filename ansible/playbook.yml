@@ -25,7 +25,7 @@
   - debug: var=scheme_validator.stdout_lines
 
   - name: apply playbook on runned instances
-    shell: cd repos/topo-verify/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbooks/eline.yml -i ../../orchestrator/ansible/ansible_hosts
+    shell: cd repos/topo-verify/ansible && ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook playbooks/eline.yml -i ../../orchestrator/ansible/ansible_hosts --extra-vars "username=vagrant"
     ignore_errors: yes
 
   - file: path=repos/topo-verify/yml state=directory
